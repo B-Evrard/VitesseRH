@@ -7,7 +7,8 @@
 
 import Foundation
 
-class AuthenticationViewModel: ObservableObject {
+@MainActor
+class LoginViewModel: ObservableObject {
     
     @Published var email: String = ""
     @Published var password: String = ""
@@ -24,18 +25,48 @@ class AuthenticationViewModel: ObservableObject {
     }
     @Published var showAlert: Bool = false
     
-    @Published var user: User?
+    @Published var isLogged: Bool = false
     
-    private func authenticate() {
+    var login: Login?
+    var token: Token?
+    
+    
+    private let apiService: APIService
+    
+    init(apiService: APIService) {
+        self.apiService = apiService
+    }
+    
+    func authenticate() async {
+        self.messageAlert = ""
+        self.login = Login(email: email, password: password)
         
-        user = User(email: email, password: password)
+        // Control
         do {
-            guard let user else { return }
-            try Control().login(user: user)
+            guard let login = login else {
+                messageAlert = ControlError.genericError().message
+                return
+            }
+            try Control().login(login: login)
         } catch let error {
             messageAlert = error.message
             return
         }
+        
+        // Auth
+        do {
+            guard let login = self.login else {
+                messageAlert = ControlError.genericError().message
+                return
+            }
+            try await token = apiService.authentication(login: login)
+            isLogged = true
+        } catch let error {
+            messageAlert = error.message
+            return
+        }
+        
+        
         
     }
     

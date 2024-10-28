@@ -1,10 +1,17 @@
+//
+//  User.swift
+//  VitesseRH
+//
+//  Created by Bruno Evrard on 24/10/2024.
+//
+
+
 struct User : Decodable {
-    var email: String
-    var password: String
-    var infoUser: InfoUser?
+    let email: String
+    let password: String
 }
 
-struct InfoUser : Decodable {
-    var token: String?
-    var isAdmin: Bool
+struct Token : Decodable {
+    let token: String?
+    let isAdmin: Bool
 }

@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+protocol APIService {
+    
+    func authentication(login: Login) async throws (APIError) -> Token
+    
+    func userRegister(registerUser: RegisterUser) async throws (APIError) -> Bool
+}
