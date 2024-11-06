@@ -12,98 +12,101 @@ struct LoginView: View {
     @ObservedObject var viewModel: LoginViewModel
     @State private var navigateToRegister = false
     
+    
     var body: some View {
-        NavigationStack {
+        
+        VStack {
             
-            ZStack{
-                Color("BackgroundColor")
-                    .edgesIgnoringSafeArea(.all)
+            LogoView()
+            Spacer()
+            
+            Text("Login")
+                .font(.largeTitle)
+            Spacer()
+            
+            VStack(alignment: .leading) {
+                Text("Email/Username")
+                    .font(.headline)
+                TextField("", text: $viewModel.email)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.bottom, 10)
                 
-                VStack {
-                    
-                    LogoView()
-                    Spacer()
-                    
-                    Text("Login")
-                        .font(.largeTitle)
-                    Spacer()
-                    
-                    VStack(alignment: .leading) {
-                        Text("Email/Username")
-                            .font(.headline)
-                        TextField("", text: $viewModel.email)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        Spacer()
-                        Text("Password")
-                            .font(.headline)
-                        SecureField("", text: $viewModel.password)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        
-                        Spacer()
-                        
-                        Text("Forgot password ?")
-                        
-                    }.padding(40)
-                        .frame(width: 335, height: 150)
-                    
-                    Spacer()
-                    VStack(alignment: .center) {
-                        
-                        // Button Sign in
-                        Button(action: {
-                            Task {
-                                await viewModel.authenticate()
-                            }
-                            
-                        }) {
-                            Text("Sign in")
-                                .frame(maxWidth: 100)
-                                .font(.headline)
-                                .foregroundColor(.black)
-                                .padding()
-                                .background(Color("ButtonColor"))
-                                .cornerRadius(10)
-                        }.navigationDestination(
-                            isPresented: $viewModel.isLogged) {
-                                CandidatsView()
-                            }
-                        
-                        Spacer()
-                        
-                        // Button Register
-                        Button(action: {
-                            navigateToRegister = true
-                        }) {
-                            Text("Register")
-                                .frame(maxWidth: 100)
-                                .font(.headline)
-                                .foregroundColor(.black)
-                                .padding()
-                                .background(Color("ButtonColor"))
-                                .cornerRadius(10)
-                            
-                        }.navigationDestination(
-                            isPresented: $navigateToRegister) {
-                                RegisterView(viewModel: RegisterViewModel(apiService: APIClient()))
-                            }
+                Spacer()
+                
+                Text("Password")
+                    .font(.headline)
+                SecureField("", text: $viewModel.password)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.bottom, 10)
+                Spacer()
+                
+                Text("Forgot password ?")
+                
+            }.padding(40)
+                .frame(width: 335, height: 200)
+            
+            Spacer()
+            
+            VStack(alignment: .center) {
+                
+                // Button Sign in
+                Button(action: {
+                    Task {
+                        await viewModel.authenticate()
                     }
-                    .frame(width: 200, height: 130)
-                    Spacer()
                     
-                    Text(viewModel.messageAlert)
-                        .transition(.move(edge: .top))
-                        .foregroundColor(.red)
-                    Spacer()
+                }) {
+                    Text("Sign in")
+                        .frame(maxWidth: 100)
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color("ButtonColor"))
+                        .cornerRadius(10)
                 }
-                .padding()
-            }
+                
+                Spacer()
+                
+                // Button Register
+                Button(action: {
+                    viewModel.navigation.navigateToRegister()
+                    
+                }) {
+                    Text("Register")
+                        .frame(maxWidth: 100)
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color("ButtonColor"))
+                        .cornerRadius(10)
+                    
+                }
+                
+            }.frame(width: 335, height: 150)
+            
+            Spacer()
+            
+            Text(viewModel.messageAlert)
+                .foregroundColor(.red)
+            
+            Spacer()
+            
         }
+        .applyBackground(Color("BackgroundColor"))
+        .onAppear {
+            viewModel.raz()
+        }
+        
     }
+    
 }
 
 
+
+
 #Preview {
-    let viewModel = LoginViewModel(apiService: APIClient())
+    let navigation = NavigationViewModel()
+    let viewModel = LoginViewModel(apiService: APIClient(), navigation: navigation)
     LoginView(
         viewModel: viewModel)
 }

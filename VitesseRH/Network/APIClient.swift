@@ -8,7 +8,7 @@
 import Foundation
 
 final class APIClient: APIService {
-    
+
     private let session: URLSessionProtocol
     
     init(session: URLSessionProtocol = URLSession.shared) {
@@ -19,14 +19,20 @@ final class APIClient: APIService {
         APIClientCore(session: session)
     }
     
-    func authentication(login: Login) async throws (APIError) -> Token {
-        let token: Token = try await apiClientCore.performAPIRequest(action: Action.user_auth(login: login)).get()
-        return token
+    func authentication(login: Login) async  -> Result<Token, APIError> {
+        return await apiClientCore.performAPIRequest(endPoint: Endpoint.user_auth(login: login))
     }
     
-    func userRegister(registerUser: RegisterUser) async throws(APIError) -> Bool {
-        let resultat: Bool = try await apiClientCore.performAPIRequest(action: Action.user_register(registerUser: registerUser)).get()
-        return resultat
+    func userRegister(registerUser: RegisterUser) async  -> Result<Bool, APIError> {
+        return await apiClientCore.performAPIRequest(endPoint: Endpoint.user_register(registerUser: registerUser))
+    }
+    
+    func candidateList() async  -> Result<[Candidate], APIError> {
+        return await apiClientCore.performAPIRequest(endPoint: Endpoint.candidateList)
+    }
+    
+    func candidate(id: String) async  -> Result<Candidate, APIError> {
+        return await apiClientCore.performAPIRequest(endPoint: Endpoint.candidate)
     }
     
     

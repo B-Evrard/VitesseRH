@@ -8,14 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var navigation = NavigationViewModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack(path: $navigation.path) {
+            LoginView(viewModel: LoginViewModel(apiService: APIClient(), navigation: navigation))
+                .navigationDestination(for: Navigation.self) { destination in
+                    switch destination {
+                    case .candidatesList:
+                        CandidatesListView(viewModel: CandidatesListViewModel(apiService: APIClient(), navigation: navigation))
+                    case .addCandidate:
+                        CandidateView(viewModel: CandidateViewModel(apiService: APIClient(), navigation: navigation))
+                    case .register:
+                        RegisterView(viewModel: RegisterViewModel(apiService: APIClient(), navigation: navigation))
+                    default:
+                        EmptyView() 
+                    }
+                }
         }
-        .padding()
     }
 }
 

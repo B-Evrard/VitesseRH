@@ -9,7 +9,11 @@ import Foundation
 
 protocol APIService {
     
-    func authentication(login: Login) async throws (APIError) -> Token
+    func authentication(login: Login) async -> Result<Token, APIError>
     
-    func userRegister(registerUser: RegisterUser) async throws (APIError) -> Bool
+    func userRegister(registerUser: RegisterUser) async  -> Result<Bool, APIError>
+    
+    func candidateList() async -> Result<[Candidate],APIError>
+    
+    func candidate(id: String) async -> Result<Candidate,APIError>
 }

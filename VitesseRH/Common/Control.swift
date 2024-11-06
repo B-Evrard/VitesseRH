@@ -35,10 +35,18 @@ public struct Control  {
         
       }
     
-    
+    func candidate(candidate: Candidate) throws (ControlError) {
+        if candidate.firstName.isEmpty {
+            throw ControlError.firstNameEmpty()
+        }
+        if candidate.lastName.isEmpty {
+            throw ControlError.lastNameEmpty()
+        }
+        if !candidate.email.isEmpty {
+            try validateEmail(candidate.email)
+        }
+    }
 
-    
-    
     private func validateEmail(_ email: String) throws (ControlError) {
         if email.isEmpty {
             throw ControlError.mailEmpty()

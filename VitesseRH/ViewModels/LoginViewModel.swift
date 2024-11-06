@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import SwiftUICore
 
 @MainActor
 class LoginViewModel: ObservableObject {
+    
+    @ObservedObject var navigation: NavigationViewModel
     
     @Published var email: String = ""
     @Published var password: String = ""
@@ -27,14 +30,16 @@ class LoginViewModel: ObservableObject {
     
     @Published var isLogged: Bool = false
     
-    var login: Login?
-    var token: Token?
+    private let tokenManager: TokenManager
     
+    var login: Login?
     
     private let apiService: APIService
     
-    init(apiService: APIService) {
+    init(apiService: APIService, navigation: NavigationViewModel) {
         self.apiService = apiService
+        self.navigation = navigation
+        self.tokenManager = TokenManager.shared
     }
     
     func authenticate() async {
@@ -54,22 +59,29 @@ class LoginViewModel: ObservableObject {
         }
         
         // Auth
-        do {
-            guard let login = self.login else {
-                messageAlert = ControlError.genericError().message
-                return
-            }
-            try await token = apiService.authentication(login: login)
-            isLogged = true
-        } catch let error {
-            messageAlert = error.message
+        guard let login = self.login else {
+            messageAlert = ControlError.genericError().message
             return
         }
+        let result = await apiService.authentication(login: login)
+        switch result {
         
+        case .success(let token):
+            tokenManager.tokenStorage.token = token
+            isLogged = true
+            navigation.navigateToCandidatesList()
+            return
         
-        
+        case .failure(let error):
+            messageAlert = error.message
+        }
     }
     
+    func raz() {
+        email = ""
+        password = ""
+        messageAlert = ""
+    }
     
 }
 

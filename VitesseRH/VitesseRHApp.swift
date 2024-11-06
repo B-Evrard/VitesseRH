@@ -11,7 +11,7 @@ import SwiftUI
 struct VitesseRHApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView(viewModel: LoginViewModel(apiService: APIClient()))
+            ContentView()
         }
     }
 }

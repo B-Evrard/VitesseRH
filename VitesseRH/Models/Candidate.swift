@@ -12,7 +12,7 @@ struct Candidate: Decodable {
     let email: String
     let note: String?
     let linkedinURL: String?
-    let firstName: String
-    let lastName: String
-    let phone: String
+    var firstName: String
+    var lastName: String
+    let phone: String?
 }
