@@ -68,6 +68,13 @@ struct CandidateView: View {
             
             
         }
+        .alert("", isPresented: $viewModel.showMessage) {
+            Button("OK", role: .cancel) {
+                viewModel.navigation.goBack()
+            }
+        } message: {
+            Text("Candidate registered successfully.")
+        }
         .applyBackground(Color("BackgroundColor"))
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -81,7 +88,10 @@ struct CandidateView: View {
                     LogoView(width: 165,height: 50)
                     Spacer()
                     Button {
-                        viewModel.Validate()
+                        //task {
+                          //  await viewModel.validate()
+                        //}
+                        
                     } label: {
                         Text("Done")
                     }

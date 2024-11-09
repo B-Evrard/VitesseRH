@@ -28,11 +28,11 @@ final class APIClientCore {
             request?.httpBody = data
         }
         
-        let authorizationHeader = endPoint.authorizationHeader
-        if let authorizationHeader {
+        if let token = TokenManager.shared.tokenStorage.token {
+            let authorizationHeader = "Bearer \(token.token ?? "")"
             request?.addValue(authorizationHeader, forHTTPHeaderField: "Authorization")
         }
-        
+
         request?.httpMethod = endPoint.httpMethod.rawValue
         
         do {

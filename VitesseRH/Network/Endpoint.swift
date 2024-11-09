@@ -12,6 +12,7 @@ enum Endpoint  {
     case user_register (registerUser: RegisterUser)
     case candidateList
     case candidate
+    case createCandidate (candidate:Candidate)
     
     enum HTTPMethod: String {
         case GET
@@ -24,6 +25,7 @@ enum Endpoint  {
         case .user_register: return .POST
         case .candidateList: return .GET
         case .candidate: return .GET
+        case .createCandidate: return .POST
         }
     }
     
@@ -41,6 +43,7 @@ enum Endpoint  {
         )
         case .candidateList: return baseURL.appendingPathComponent("candidate")
         case .candidate: return baseURL.appendingPathComponent("candidate")
+        case .createCandidate: return baseURL.appendingPathComponent("candidate")
             
         }
     }
@@ -51,21 +54,13 @@ enum Endpoint  {
             return try? JSONEncoder().encode(login)
         case .user_register(registerUser: let registerUser):
             return try? JSONEncoder().encode(registerUser)
-        
+        case .createCandidate(candidate: let candiate):
+            return try? JSONEncoder().encode(candiate)
         default : return nil
         }
     }
         
-    var authorizationHeader: String? {
-        switch self {
-        case .user_auth, .user_register: return nil
-        case .candidateList, .candidate:
-            guard let token = TokenManager.shared.tokenStorage.token else {
-                return nil
-            }
-            return "Bearer \(token.token ?? "")"
-        }
-    }
+   
         
     
         

@@ -16,4 +16,6 @@ protocol APIService {
     func candidateList() async -> Result<[Candidate],APIError>
     
     func candidate(id: String) async -> Result<Candidate,APIError>
+    
+    func createCandidate(candidate: Candidate) async  -> Result<Candidate, APIError>
 }

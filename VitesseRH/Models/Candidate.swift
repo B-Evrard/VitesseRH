@@ -6,7 +6,7 @@
 //
 
 
-struct Candidate: Decodable {
+struct Candidate: Codable {
     let id: String?
     let isFavorite: Bool
     let email: String
