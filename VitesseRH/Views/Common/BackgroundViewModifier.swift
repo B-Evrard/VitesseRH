@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct BackgroundViewModifier : ViewModifier {
-    let color:  Color
+    let colors:  [Color]
     func body(content: Content) -> some View {
         ZStack {
-            Color(color)
-                .edgesIgnoringSafeArea(.all)
+            LinearGradient(gradient: Gradient(colors: colors), startPoint: .top, endPoint: .bottom)
+                           .edgesIgnoringSafeArea(.all)
             content
         }
       
@@ -20,9 +20,8 @@ struct BackgroundViewModifier : ViewModifier {
 }
 
 extension View {
-    public func applyBackground(_ color: Color) -> some View {
-        modifier(BackgroundViewModifier(color: color))
+    public func applyBackground(_ colors: [Color]) -> some View {
+        modifier(BackgroundViewModifier(colors: colors))
     }
 }
-
 

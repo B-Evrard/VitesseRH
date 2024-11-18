@@ -1,24 +1,21 @@
+//
+//  AppViewModel.swift
+//  VitesseRH
+//
+//  Created by Bruno Evrard on 13/11/2024.
+//
+
+import Foundation
+
 class AppViewModel: ObservableObject {
     @Published var isLogged: Bool
     
+    let tokenManager: TokenManager
     
     init() {
-        isLogged = false
+        self.isLogged = false
+        self.tokenManager = TokenManager.shared
     }
     
-    lazy var authenticationViewModel: AuthenticationViewModel = {
-        return AuthenticationViewModel(apiService: APIClient()) { user in
-            self.isLogged = true
-            self.accountDetailViewModel.user = user
-            self.moneyTransferViewModel.user = user
-        }
-    }()
     
-    lazy var accountDetailViewModel: AccountDetailViewModel = {
-        return AccountDetailViewModel(apiService: APIClient())
-    }()
-    
-    lazy var moneyTransferViewModel: MoneyTransferViewModel = {
-        return MoneyTransferViewModel(apiService: APIClient())
-    }()
 }

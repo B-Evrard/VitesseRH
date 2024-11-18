@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+    
 final class APIClientCore {
     
     private let session: URLSessionProtocol
@@ -31,8 +31,13 @@ final class APIClientCore {
         if let token = TokenManager.shared.tokenStorage.token {
             let authorizationHeader = "Bearer \(token.token ?? "")"
             request?.addValue(authorizationHeader, forHTTPHeaderField: "Authorization")
+        } else {
+            if (ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1") {
+                let authorizationHeader = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbWluIjp0cnVlLCJlbWFpbCI6ImFkbWluQHZpdGVzc2UuY29tIn0.jwtsrxgCQYhf1cUvhnNC8UlF9KwFV16klnHI-t_w3R8"
+                request?.addValue(authorizationHeader, forHTTPHeaderField: "Authorization")
+            }
         }
-
+        
         request?.httpMethod = endPoint.httpMethod.rawValue
         
         do {

@@ -8,9 +8,11 @@
 import Foundation
 import SwiftUI
 class NavigationViewModel: ObservableObject {
+    
     @Published var path = NavigationPath()
 
     func navigateTo(dest: Navigation) {
+        print("Navigate to \(dest)")
         path.append(dest)
     }
 
@@ -33,6 +35,11 @@ class NavigationViewModel: ObservableObject {
         navigateTo(dest: .addCandidate)
     }
     
+    func navigateToCandidate(id: String)
+    {
+        navigateTo(dest: .candidate(id: id))
+    }
+    
     func goBack() {
         if (path.count>0) {
             path.removeLast()
@@ -44,10 +51,10 @@ class NavigationViewModel: ObservableObject {
     
 }
 
-enum Navigation {
+enum Navigation: Hashable {
     case login
     case candidatesList
-    case candidate
+    case candidate(id: String)
     case addCandidate
     case register
 }

@@ -30,7 +30,7 @@ class RegisterViewModel: ObservableObject {
         // Control
         self.messageAlert = ""
         do {
-            try Control().registerUser(registerUser: registerUser, confirmedPassword: confirmedPassword)
+            try Control.registerUser(registerUser: registerUser, confirmedPassword: confirmedPassword)
         } catch let error {
             messageAlert = error.message
             return

@@ -32,11 +32,11 @@ final class APIClient: APIService {
     }
     
     func candidate(id: String) async  -> Result<Candidate, APIError> {
-        return await apiClientCore.performAPIRequest(endPoint: Endpoint.candidate)
+        return await apiClientCore.performAPIRequest(endPoint: Endpoint.candidate(id: id))
     }
     
     func createCandidate(candidate: Candidate) async  -> Result<Candidate, APIError> {
-        return await apiClientCore.performAPIRequest(endPoint: Endpoint.candidate)
+        return await apiClientCore.performAPIRequest(endPoint: Endpoint.createCandidate(candidate: candidate))
     }
     
     

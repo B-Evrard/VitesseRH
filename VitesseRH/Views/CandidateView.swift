@@ -10,13 +10,7 @@ import SwiftUI
 struct CandidateView: View {
     
     @ObservedObject var viewModel: CandidateViewModel
-    
-    @State var firstName: String = ""
-    @State var lastName: String = ""
-    @State var email: String = ""
-    @State var phone: String = ""
-    @State var linkedIn: String = ""
-    @State var note: String = ""
+    @StateObject  var navigation: NavigationViewModel
     
     var body: some View {
         
@@ -26,74 +20,184 @@ struct CandidateView: View {
             Spacer()
             
             VStack(alignment: .leading) {
-                Text("First Name")
-                    .font(.headline)
-                TextField("", text: $firstName)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.bottom, 10)
-                
-                Text("Last Name")
-                    .font(.headline)
-                TextField("", text: $lastName)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.bottom, 10)
-                
-                Text("Phone")
-                    .font(.headline)
-                TextField("", text: $phone)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.bottom, 10)
-                
-                Text("Email")
-                    .font(.headline)
-                TextField("", text: $email)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.bottom, 10)
-                
-                Text("LinkedIn")
-                    .font(.headline)
-                TextField("", text: $linkedIn)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.bottom, 10)
-                
+                    if (viewModel.isAddMode) {
+                        Text("First Name")
+                            .font(.headline)
+                        TextField("", text: $viewModel.firstName)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.bottom, 10)
+                           
+                        
+                        Text("Last Name")
+                            .font(.headline)
+                        TextField("", text: $viewModel.lastName)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.bottom, 10)
+                    }
+                    else {
+                        HStack (alignment: .center){
+                            Text(viewModel.name)
+                                .font(.largeTitle)
+                                .foregroundColor(.black)
+                                //.frame(height: 60, alignment: .center)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            Spacer()
+                        
+                            Image(systemName: "star.fill")
+                            .foregroundColor(.black)
+                            //.frame(height: 60, alignment: .center)
+                            .padding()
+                            
+                        }.frame(width: 335, height: 100)
+                        
+                    }
+                    
+                if (viewModel.isEditMode) {
+                    
+                    
+                        Text("Phone")
+                            .font(.headline)
+                            
+                            
+                        TextField("", text: $viewModel.phone)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.bottom, 10)
+                   
+                    
+                   
+                        Text("Email")
+                            .font(.headline)
+                            
+                        TextField("", text: $viewModel.email)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.bottom, 10)
+                    
+                   
+                    
+                        Text("LinkedIn")
+                            .font(.headline)
+                        TextField("", text: $viewModel.linkedIn)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.bottom, 10)
+                    
+                   
+                    
+                   
+                } else {
+                    
+                    HStack {
+                        Text("Phone")
+                            .padding(.bottom, 10)
+                            .frame(width: 80, alignment: .leading)
+                        Text(viewModel.phone)
+                            .padding(.bottom, 10)
+                    }
+                    
+                    HStack {
+                        Text("Email")
+                            .padding(.bottom, 10)
+                            .frame(width: 80, alignment: .leading)
+                        Text(viewModel.email)
+                            .padding(.bottom, 10)
+                    }
+                    
+                    
+                    
+                    HStack {
+                        Text("LinkedIn ")
+                            .frame(width: 80, alignment: .leading)
+                        if (viewModel.isLinkedInURLValid) {
+                            Link("Go on Linkedin", destination: URL(string: viewModel.linkedIn)!)
+                                .frame(width: 150, height: 5)
+                                .padding()
+                                .foregroundColor(.black)
+                                .background(Color("ButtonColor"))
+                                .cornerRadius(8)
+                        }
+                        
+                            
+                        
+                    }.padding(.bottom, 10)
+                }
                 Text("Note")
-                    .font(.headline)
-                TextEditor(text: $note)
-                    .frame(height: 150)
-                    .border(Color.gray, width: 1)
-                    .cornerRadius(10)
+                    .font(viewModel.isAddMode ? .headline : .body)
                 
-            }.padding(40)
+                
+                if (!viewModel.isEditMode)
+                {
+                    ScrollView {
+                        TextEditor(text: $viewModel.note)
+                            .disabled(true)
+                            .padding()
+                            .background(Color.clear)
+                    }
+                    .border(Color.black, width: 1)
+                    .frame(height: 250)
+                    .cornerRadius(10)
+                }
+                else
+                {
+                    TextEditor(text: $viewModel.note)
+                        .frame(height: 250)
+                        .border(Color.black, width: 1)
+                        .cornerRadius(10)
+                }
+                
+                
+                    
+                
+
+                    
+            }.padding(10)
                 .frame(width: 335, height: 700)
             
-            
+            Text(viewModel.messageAlert)
+                .transition(.move(edge: .top))
+                .foregroundColor(.red)
+            Spacer()
         }
         .alert("", isPresented: $viewModel.showMessage) {
             Button("OK", role: .cancel) {
-                viewModel.navigation.goBack()
+                navigation.goBack()
             }
         } message: {
             Text("Candidate registered successfully.")
         }
-        .applyBackground(Color("BackgroundColor"))
+        .applyBackground([Color("BackgroundColorFrom"), Color("BackgroundColorTo")])
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 HStack {
                     Button {
-                        viewModel.navigation.goBack()
+                        navigation.goBack()
                     } label: {
-                        Text("Cancel")
+                        if (viewModel.isEditMode) {
+                            Text("Cancel")
+                        }
+                        else {
+                            Image(systemName: "chevron.left")
+                                                .foregroundColor(.blue)
+                        }
+                       
                     }
                     Spacer()
                     LogoView(width: 165,height: 50)
                     Spacer()
                     Button {
-                        //task {
-                          //  await viewModel.validate()
-                        //}
+                        
+                            if (viewModel.isEditMode)
+                        {
+                                Task {
+                                    await viewModel.validate()
+                                }
+                            }
+                            else {
+                                viewModel.mode = .edit
+                            }
+                        
                         
                     } label: {
-                        Text("Done")
+                        Text(!viewModel.isEditMode  ? "Edit" : "Done")
                     }
                     
                 }
@@ -102,11 +206,35 @@ struct CandidateView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear() {
+            Task {
+                await viewModel.readCandidate()
+            }
+            
+        }
     }
+        
 }
 
-#Preview {
-    let navigation = NavigationViewModel()
-    let viewModel = CandidateViewModel(apiService: APIClient(), navigation: navigation)
-    CandidateView(viewModel: viewModel)
-}
+//#Preview {
+//    let navigation = NavigationViewModel()
+//    let viewModel = CandidateViewModel(apiService: APIClient(), navigation: navigation)
+//    CandidateView(viewModel: viewModel)
+//}
+
+//struct CandidateDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let navigation = NavigationViewModel()
+//        let viewModelAdd = CandidateViewModel(apiService: APIClient(), navigation: navigation)
+//        let viewModelVisu = CandidateViewModel(apiService: APIClient(), navigation: navigation,mode: .view, id: "68ACD0E9-2BA8-41C7-B0B7-8576D53183E2")
+//        
+//        
+//        Group {
+//            CandidateView(viewModel: viewModelVisu)
+//                .previewDisplayName("Mode Édition")
+//            
+//            CandidateView(viewModel: viewModelAdd)
+//                .previewDisplayName("Mode Création")
+//        }
+//    }
+//}

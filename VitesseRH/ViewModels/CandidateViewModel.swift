@@ -8,9 +8,8 @@
 import Foundation
 import SwiftUICore
 
+@MainActor
 class CandidateViewModel: ObservableObject {
-    
-    @ObservedObject var navigation: NavigationViewModel
     
     @Published var id: String = ""
     @Published var firstName: String = ""
@@ -20,49 +19,53 @@ class CandidateViewModel: ObservableObject {
     @Published var linkedIn: String = ""
     @Published var note: String = ""
     @Published var favorite: Bool = false
-        
+    
+    @Published var isLinkedInURLValid: Bool = false
     @Published var messageAlert: String = ""
     @Published var showMessage: Bool = false
     
-    private let mode: FormMode
+    var name: String = ""
+    
+    @Published var mode: FormMode
+    
     private let apiService: APIService
     
     /// View or edit candidate
     /// - Parameters:
     ///   - apiService: apiService
     ///   - id: Candidate Id
-    init(apiService: APIService, navigation: NavigationViewModel, id: String ) async {
+    init(apiService: APIService, mode: FormMode, id: String ) {
         self.apiService = apiService
-        self.navigation = navigation
-        self.mode = FormMode.view
+        //self.navigation = navigation
+        self.mode = mode
         self.id = id
-        await readCandidate()
-       
     }
     
     /// Add candidate
     /// - Parameters:
     ///   - apiService: apiService
-    init(apiService: APIService,navigation: NavigationViewModel ) {
+    init(apiService: APIService) {
         self.apiService = apiService
-        self.navigation = navigation
+        //self.navigation = navigation
         self.mode = FormMode.add
-        let candidate = Candidate(id: nil, isFavorite: false, email: "", note: nil, linkedinURL: nil, firstName: "", lastName: "", phone: nil)
+        
     }
     
     func readCandidate() async {
         
-        let id = self.id
-        let result = await apiService.candidate(id: id)
-        switch result {
-        
-        case .success(let candidate):
-            candidateToView(candidate: candidate)
-            return
+        if (self.mode != .add) {
+            let id = self.id
+            let result = await apiService.candidate(id: id)
+            switch result {
             
-        case .failure(let error):
-            messageAlert = error.message
-            return
+            case .success(let candidate):
+                candidateToView(candidate: candidate)
+                return
+                
+            case .failure(let error):
+                messageAlert = error.message
+                return
+            }
         }
         
     }
@@ -73,13 +76,20 @@ class CandidateViewModel: ObservableObject {
         self.showMessage = false
         let candidate = viewToCandidate()
         do {
-            try Control().candidate(candidate: <#T##Candidate#>)
+            try Control.candidate(candidate: candidate)
         } catch let error {
-           
+            messageAlert = error.message
+            return
         }
         
-        // Create candidate
-        let result = await apiService.candidate(id: <#T##String#>)
+        // Update
+        var result: Result<Candidate, APIError>?
+        switch mode {
+        case .view, .edit: break
+        case .add:
+            result = await apiService.createCandidate(candidate: candidate)
+        }
+        
         switch result {
         
         case .success:
@@ -89,7 +99,11 @@ class CandidateViewModel: ObservableObject {
         case .failure(let error):
             messageAlert = error.message
             return
+        case .none:
+            break
         }
+       
+        
         
     }
     
@@ -102,6 +116,15 @@ class CandidateViewModel: ObservableObject {
         self.firstName = candidate.firstName
         self.lastName = candidate.lastName
         self.phone = candidate.phone ?? ""
+        
+        self.name = candidate.name
+        self.isLinkedInURLValid = false
+        if linkedIn.isNotEmpty {
+            self.isLinkedInURLValid = Control.isValidLinkedInURL(linkedIn)
+        }
+       
+        
+        
     }
     
     func viewToCandidate() -> Candidate {
@@ -112,9 +135,18 @@ class CandidateViewModel: ObservableObject {
         
         return candidate
     }
-                     
-        
     
+    func editCandidate() {
+        //navigation.navigateToEditCandidate(id: self.id)
+    }
+    
+    var isEditMode: Bool {
+        return (mode == .add ||  mode == .edit) ? true : false
+    }
+    
+    var isAddMode: Bool {
+        return mode == .add ? true : false
+    }
     
 }
 

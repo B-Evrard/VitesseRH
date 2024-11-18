@@ -11,8 +11,6 @@ import SwiftUICore
 @MainActor
 class LoginViewModel: ObservableObject {
     
-    @ObservedObject var navigation: NavigationViewModel
-    
     @Published var email: String = ""
     @Published var password: String = ""
     
@@ -28,18 +26,14 @@ class LoginViewModel: ObservableObject {
     }
     @Published var showAlert: Bool = false
     
-    @Published var isLogged: Bool = false
-    
-    private let tokenManager: TokenManager
-    
-    var login: Login?
-    
+    let onLoginSucceed: ((Token) -> Void)
+   
+    private var login: Login?
     private let apiService: APIService
     
-    init(apiService: APIService, navigation: NavigationViewModel) {
+    init(apiService: APIService, _ callback: @escaping (Token) -> Void) {
         self.apiService = apiService
-        self.navigation = navigation
-        self.tokenManager = TokenManager.shared
+        self.onLoginSucceed = callback
     }
     
     func authenticate() async {
@@ -52,7 +46,7 @@ class LoginViewModel: ObservableObject {
                 messageAlert = ControlError.genericError().message
                 return
             }
-            try Control().login(login: login)
+            try Control.login(login: login)
         } catch let error {
             messageAlert = error.message
             return
@@ -67,9 +61,7 @@ class LoginViewModel: ObservableObject {
         switch result {
         
         case .success(let token):
-            tokenManager.tokenStorage.token = token
-            isLogged = true
-            navigation.navigateToCandidatesList()
+            onLoginSucceed(token)
             return
         
         case .failure(let error):

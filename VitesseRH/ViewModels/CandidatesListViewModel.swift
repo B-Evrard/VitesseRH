@@ -7,12 +7,13 @@
 
 import Foundation
 import SwiftUICore
+import SwiftUI
 
 @MainActor
 class CandidatesListViewModel: ObservableObject {
     
-    @ObservedObject var navigation: NavigationViewModel
-    @Published var candidates: [Candidate] = []
+    private var candidates: [Candidate] = []
+    @Published var candidatesFilter: [Candidate] = []
     @Published var messageAlert: String = "" {
         didSet {
             if messageAlert.isEmpty {
@@ -25,12 +26,15 @@ class CandidatesListViewModel: ObservableObject {
     }
     @Published var showAlert: Bool = false
     @Published var addCandidate: Bool = false
+    @Published var isEdit: Bool = false
+    @Published var search = ""
+    
+    
     
     private let apiService: APIService
     
-    init(apiService: APIService, navigation: NavigationViewModel) {
+    init(apiService: APIService) {
         self.apiService = apiService
-        self.navigation = navigation
     }
     
     func getListCandidates() async {
@@ -40,15 +44,32 @@ class CandidatesListViewModel: ObservableObject {
         
         case .success(let candidateList):
             candidates = candidateList
+            filterCandidates()
             return
         
         case .failure(let error):
             messageAlert = error.message
             return
         }
-        
-            
     }
+    
+    func viewCandidate(navigation: NavigationViewModel, candidate: Candidate) {
+        guard let candidateID = candidate.id else { return }
+        navigation.navigateToCandidate(id: candidateID)
+        
+    }
+    
+    func filterCandidates() {
+        guard search.isNotEmpty else {
+            candidatesFilter = candidates
+            return
+        }
+        candidatesFilter = candidates.filter { candidate in
+            candidate.name.contains(self.search)
+        }
+    }
+    
+    
     
     
 }

@@ -11,7 +11,7 @@ enum Endpoint  {
     case user_auth (login: Login)
     case user_register (registerUser: RegisterUser)
     case candidateList
-    case candidate
+    case candidate (id: String)
     case createCandidate (candidate:Candidate)
     
     enum HTTPMethod: String {
@@ -42,7 +42,7 @@ enum Endpoint  {
             "user/register"
         )
         case .candidateList: return baseURL.appendingPathComponent("candidate")
-        case .candidate: return baseURL.appendingPathComponent("candidate")
+        case .candidate(let id): return baseURL.appendingPathComponent("candidate/\(id)")
         case .createCandidate: return baseURL.appendingPathComponent("candidate")
             
         }
@@ -54,8 +54,9 @@ enum Endpoint  {
             return try? JSONEncoder().encode(login)
         case .user_register(registerUser: let registerUser):
             return try? JSONEncoder().encode(registerUser)
-        case .createCandidate(candidate: let candiate):
-            return try? JSONEncoder().encode(candiate)
+        case .createCandidate(candidate: let candidate):
+            return try? JSONEncoder().encode(candidate)
+        
         default : return nil
         }
     }

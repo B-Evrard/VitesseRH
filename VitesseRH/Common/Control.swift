@@ -11,53 +11,71 @@ import Foundation
 public struct Control  {
     
     
-    func login(login: Login) throws (ControlError) {
+    static func login(login: Login) throws (ControlError) {
         try validateEmail(login.email)
-        if login.password.isEmpty {
+        guard login.password.isNotEmpty else {
             throw ControlError.passwordEmpty()
         }
     }
     
-    func registerUser(registerUser: RegisterUser, confirmedPassword: String) throws (ControlError) {
-        if registerUser.firstName.isEmpty {
+    static func registerUser(registerUser: RegisterUser, confirmedPassword: String) throws (ControlError) {
+        guard registerUser.firstName.isNotEmpty else {
             throw ControlError.firstNameEmpty()
         }
-        if registerUser.lastName.isEmpty {
+        guard registerUser.lastName.isNotEmpty else {
             throw ControlError.lastNameEmpty()
         }
+    
         try validateEmail(registerUser.email)
-        if registerUser.password.isEmpty {
+        
+        guard registerUser.password.isNotEmpty else {
             throw ControlError.passwordEmpty()
         }
-        if (registerUser.password != confirmedPassword) {
+        guard registerUser.password == confirmedPassword else {
             throw ControlError.passwordNotMatch()
         }
-        
-      }
+    }
     
-    func candidate(candidate: Candidate) throws (ControlError) {
-        if candidate.firstName.isEmpty {
+    static func candidate(candidate: Candidate) throws (ControlError) {
+        guard candidate.firstName.isNotEmpty else {
             throw ControlError.firstNameEmpty()
         }
-        if candidate.lastName.isEmpty {
+        guard candidate.lastName.isNotEmpty else {
             throw ControlError.lastNameEmpty()
         }
-        if !candidate.email.isEmpty {
+        
+        if candidate.email.isNotEmpty {
             try validateEmail(candidate.email)
         }
-    }
 
-    private func validateEmail(_ email: String) throws (ControlError) {
-        if email.isEmpty {
+        if let linkedinUrl = candidate.linkedinURL, linkedinUrl.isNotEmpty {
+            guard isValidLinkedInURL(linkedinUrl) else {
+                throw ControlError.invalidLinkedinUrl()
+            }
+        }
+    }
+    
+    private static func validateEmail(_ email: String) throws (ControlError) {
+        guard email.isNotEmpty else {
             throw ControlError.mailEmpty()
         }
-        
+
         let emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,64}$"
         let emailPredicate = NSPredicate(format: "SELF MATCHES[c] %@", emailRegex)
         
-        if !emailPredicate.evaluate(with: email) {
+        guard emailPredicate.evaluate(with: email) else {
             throw ControlError.invalidFormatMail()
         }
     }
-    
+   
+    static func isValidLinkedInURL(_ urlString: String) -> Bool {
+        guard let url = URL(string: urlString),
+              url.scheme == "http" || url.scheme == "https",
+              url.host == "www.linkedin.com" else {
+            return false
+        }
+        return true
+    }
+        
+   
 }

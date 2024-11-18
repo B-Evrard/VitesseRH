@@ -15,4 +15,8 @@ struct Candidate: Codable {
     var firstName: String
     var lastName: String
     let phone: String?
+    
+    var name: String {
+        return "\(firstName) \(lastName)"
+    }
 }

@@ -27,33 +27,38 @@ struct RegisterView: View {
                     .font(.headline)
                 TextField("", text: $viewModel.registerUser.firstName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.bottom, 10)
                 Spacer()
                 
                 Text("Last Name")
                     .font(.headline)
                 TextField("", text: $viewModel.registerUser.lastName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.bottom, 10)
                 Spacer()
                 
                 Text("Email")
                     .font(.headline)
                 TextField("", text: $viewModel.registerUser.email)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.bottom, 10)
                 Spacer()
                 
                 Text("Password")
                     .font(.headline)
                 SecureField("", text: $viewModel.registerUser.password)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.bottom, 10)
                 Spacer()
                 
                 Text("Confirm Password")
                     .font(.headline)
                 SecureField("", text: $viewModel.confirmedPassword)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.bottom, 10)
                 Spacer()
                 
-            }.padding(40)
+            }.padding(10)
                 .frame(width: 335, height: 370.0)
             
             VStack(alignment: .center) {
@@ -91,13 +96,14 @@ struct RegisterView: View {
         .onAppear {
             viewModel.raz()
         }
-        .applyBackground(Color("BackgroundColor"))
+        .applyBackground([Color("BackgroundColorFrom"), Color("BackgroundColorTo")])
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
                     viewModel.navigation.goBack()
                 } label: {
                     Text("Cancel")
+                        .foregroundColor(Color("ButtonColor"))
                 }
             }
         }
