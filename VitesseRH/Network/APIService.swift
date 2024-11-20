@@ -18,4 +18,10 @@ protocol APIService {
     func candidate(id: String) async -> Result<Candidate,APIError>
     
     func createCandidate(candidate: Candidate) async  -> Result<Candidate, APIError>
+    
+    func updateCandidate(candidate: Candidate) async  -> Result<Candidate, APIError>
+    
+    func deleteCandidate(id: String) async  -> Result<Bool, APIError>
+    
+    func updateFavorite(id: String) async  -> Result<Candidate, APIError>
 }

@@ -20,70 +20,85 @@ struct CandidateView: View {
             Spacer()
             
             VStack(alignment: .leading) {
-                    if (viewModel.isAddMode) {
-                        Text("First Name")
-                            .font(.headline)
-                        TextField("", text: $viewModel.firstName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.bottom, 10)
-                           
-                        
-                        Text("Last Name")
-                            .font(.headline)
-                        TextField("", text: $viewModel.lastName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.bottom, 10)
-                    }
-                    else {
-                        HStack (alignment: .center){
-                            Text(viewModel.name)
-                                .font(.largeTitle)
-                                .foregroundColor(.black)
-                                //.frame(height: 60, alignment: .center)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                            Spacer()
-                        
-                            Image(systemName: "star.fill")
-                            .foregroundColor(.black)
-                            //.frame(height: 60, alignment: .center)
-                            .padding()
-                            
-                        }.frame(width: 335, height: 100)
-                        
-                    }
+                if (viewModel.isAddMode) {
+                    Text("First Name")
+                        .font(.headline)
+                    TextField("", text: $viewModel.firstName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.bottom, 10)
                     
+                    
+                    Text("Last Name")
+                        .font(.headline)
+                    TextField("", text: $viewModel.lastName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.bottom, 10)
+                }
+                else {
+                    HStack (alignment: .center){
+                        Text(viewModel.name)
+                            .font(.largeTitle)
+                            .foregroundColor(.black)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                        Spacer()
+                        
+                        if (viewModel.isAllowedEditFavorite) {
+                            Image(systemName: viewModel.favorite ? "star.fill" : "star")
+                                .scaledToFit()
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        viewModel.favorite.toggle()
+                                    }
+                                    Task {
+                                        await viewModel.updateFavorite()
+                                    }
+                                    
+                                }
+                        }
+                        else {
+                            Image(systemName: viewModel.favorite ? "star.fill" : "star")
+                                .foregroundColor(.black)
+                                .padding()
+                        }
+                        
+                        
+                    }.frame(width: 335, height: 100)
+                    
+                }
+                
                 if (viewModel.isEditMode) {
                     
+                    Text("Phone")
+                        .font(.headline)
                     
-                        Text("Phone")
-                            .font(.headline)
-                            
-                            
-                        TextField("", text: $viewModel.phone)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.bottom, 10)
-                   
                     
-                   
-                        Text("Email")
-                            .font(.headline)
-                            
-                        TextField("", text: $viewModel.email)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.bottom, 10)
+                    TextField("", text: $viewModel.phone)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.bottom, 10)
                     
-                   
                     
-                        Text("LinkedIn")
-                            .font(.headline)
-                        TextField("", text: $viewModel.linkedIn)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.bottom, 10)
                     
-                   
+                    Text("Email")
+                        .font(.headline)
                     
-                   
+                    TextField("", text: $viewModel.email)
+                        .autocorrectionDisabled(true)
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.bottom, 10)
+                    
+                    
+                    
+                    Text("LinkedIn")
+                        .font(.headline)
+                    TextField("", text: $viewModel.linkedIn)
+                        .autocorrectionDisabled(true)
+                        .keyboardType(.URL)
+                        .textInputAutocapitalization(.never)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.bottom, 10)
                 } else {
                     
                     HStack {
@@ -116,7 +131,7 @@ struct CandidateView: View {
                                 .cornerRadius(8)
                         }
                         
-                            
+                        
                         
                     }.padding(.bottom, 10)
                 }
@@ -143,12 +158,6 @@ struct CandidateView: View {
                         .border(Color.black, width: 1)
                         .cornerRadius(10)
                 }
-                
-                
-                    
-                
-
-                    
             }.padding(10)
                 .frame(width: 335, height: 700)
             
@@ -159,41 +168,52 @@ struct CandidateView: View {
         }
         .alert("", isPresented: $viewModel.showMessage) {
             Button("OK", role: .cancel) {
-                navigation.goBack()
+                if (viewModel.isAddMode) {
+                    navigation.goBack()
+                }
+                else {
+                    viewModel.mode = .view
+                }
+                
             }
         } message: {
-            Text("Candidate registered successfully.")
+            Text(viewModel.isAddMode ? "Candidate added successfully." :"Candidate updated successfully.")
         }
         .applyBackground([Color("BackgroundColorFrom"), Color("BackgroundColorTo")])
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 HStack {
                     Button {
-                        navigation.goBack()
+                        if (viewModel.isEditMode && !viewModel.isAddMode) {
+                            viewModel.mode = .view
+                        }
+                        else {
+                            navigation.goBack()
+                        }
+                        
                     } label: {
                         if (viewModel.isEditMode) {
                             Text("Cancel")
                         }
                         else {
                             Image(systemName: "chevron.left")
-                                                .foregroundColor(.blue)
+                                .foregroundColor(.blue)
                         }
-                       
+                        
                     }
                     Spacer()
                     LogoView(width: 165,height: 50)
                     Spacer()
                     Button {
                         
-                            if (viewModel.isEditMode)
-                        {
-                                Task {
-                                    await viewModel.validate()
-                                }
+                        if (viewModel.isEditMode) {
+                            Task {
+                                await viewModel.validate()
                             }
-                            else {
-                                viewModel.mode = .edit
-                            }
+                        }
+                        else {
+                            viewModel.mode = .edit
+                        }
                         
                         
                     } label: {
@@ -213,7 +233,7 @@ struct CandidateView: View {
             
         }
     }
-        
+    
 }
 
 //#Preview {
@@ -227,12 +247,12 @@ struct CandidateView: View {
 //        let navigation = NavigationViewModel()
 //        let viewModelAdd = CandidateViewModel(apiService: APIClient(), navigation: navigation)
 //        let viewModelVisu = CandidateViewModel(apiService: APIClient(), navigation: navigation,mode: .view, id: "68ACD0E9-2BA8-41C7-B0B7-8576D53183E2")
-//        
-//        
+//
+//
 //        Group {
 //            CandidateView(viewModel: viewModelVisu)
 //                .previewDisplayName("Mode Édition")
-//            
+//
 //            CandidateView(viewModel: viewModelAdd)
 //                .previewDisplayName("Mode Création")
 //        }

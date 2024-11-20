@@ -6,7 +6,7 @@
 //
 
 import Foundation
-    
+
 final class APIClientCore {
     
     private let session: URLSessionProtocol
@@ -21,13 +21,14 @@ final class APIClientCore {
         var request : URLRequest?
         request = URLRequest(url: url)
         request?.setValue("application/json", forHTTPHeaderField: "Content-Type")
-              
+        
         
         let data = endPoint.body
         if let data {
             request?.httpBody = data
         }
         
+        // TODO: Supprimer le test preview
         if let token = TokenManager.shared.tokenStorage.token {
             let authorizationHeader = "Bearer \(token.token ?? "")"
             request?.addValue(authorizationHeader, forHTTPHeaderField: "Authorization")
@@ -72,7 +73,7 @@ final class APIClientCore {
                 return .failure(APIError.invalidData())
             }
             return .success(result)
-       
+            
         case 400...499:
             guard let error = try? JSONDecoder().decode(ErrorResponse.self, from: data) else {
                 return .failure(APIError.genericError())

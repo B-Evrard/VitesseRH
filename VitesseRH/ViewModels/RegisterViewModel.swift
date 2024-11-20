@@ -39,7 +39,7 @@ class RegisterViewModel: ObservableObject {
         // Create registeredUser
         let result = await apiService.userRegister(registerUser: registerUser)
         switch result {
-        
+            
         case .success:
             self.showMessage = true
             return
@@ -48,7 +48,7 @@ class RegisterViewModel: ObservableObject {
             messageAlert = error.message
             return
         }
-      
+        
     }
     
     func cancel(){

@@ -57,7 +57,7 @@ class CandidateViewModel: ObservableObject {
             let id = self.id
             let result = await apiService.candidate(id: id)
             switch result {
-            
+                
             case .success(let candidate):
                 candidateToView(candidate: candidate)
                 return
@@ -85,13 +85,15 @@ class CandidateViewModel: ObservableObject {
         // Update
         var result: Result<Candidate, APIError>?
         switch mode {
-        case .view, .edit: break
+        case .edit:
+            result = await apiService.updateCandidate(candidate: candidate)
         case .add:
             result = await apiService.createCandidate(candidate: candidate)
+        case .view: break
         }
         
         switch result {
-        
+            
         case .success:
             self.showMessage = true
             return
@@ -102,10 +104,24 @@ class CandidateViewModel: ObservableObject {
         case .none:
             break
         }
-       
-        
         
     }
+    
+    func updateFavorite() async {
+        self.messageAlert = ""
+        let result = await apiService.updateFavorite(id: self.id)
+        switch result {
+            
+        case .success:
+            return
+            
+        case .failure(let error):
+            messageAlert = error.message
+            return
+            
+        }
+    }
+    
     
     func candidateToView(candidate: Candidate) {
         self.id = candidate.id ?? ""
@@ -122,7 +138,7 @@ class CandidateViewModel: ObservableObject {
         if linkedIn.isNotEmpty {
             self.isLinkedInURLValid = Control.isValidLinkedInURL(linkedIn)
         }
-       
+        
         
         
     }
@@ -136,16 +152,17 @@ class CandidateViewModel: ObservableObject {
         return candidate
     }
     
-    func editCandidate() {
-        //navigation.navigateToEditCandidate(id: self.id)
-    }
-    
     var isEditMode: Bool {
         return (mode == .add ||  mode == .edit) ? true : false
     }
     
     var isAddMode: Bool {
         return mode == .add ? true : false
+    }
+    
+    var isAllowedEditFavorite: Bool {
+        guard let token = TokenManager.shared.tokenStorage.token else { return false }
+        return !isEditMode && token.isAdmin
     }
     
 }

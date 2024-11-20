@@ -12,11 +12,16 @@ enum Endpoint  {
     case user_register (registerUser: RegisterUser)
     case candidateList
     case candidate (id: String)
-    case createCandidate (candidate:Candidate)
+    case updateCandidate (candidate: Candidate)
+    case createCandidate (candidate: Candidate)
+    case deleteCandidate (id: String)
+    case updateFavorite (id: String)
     
     enum HTTPMethod: String {
         case GET
         case POST
+        case PUT
+        case DELETE
     }
     
     var httpMethod: HTTPMethod {
@@ -26,6 +31,9 @@ enum Endpoint  {
         case .candidateList: return .GET
         case .candidate: return .GET
         case .createCandidate: return .POST
+        case .updateCandidate: return .PUT
+        case .deleteCandidate: return .DELETE
+        case .updateFavorite: return .POST
         }
     }
     
@@ -44,7 +52,16 @@ enum Endpoint  {
         case .candidateList: return baseURL.appendingPathComponent("candidate")
         case .candidate(let id): return baseURL.appendingPathComponent("candidate/\(id)")
         case .createCandidate: return baseURL.appendingPathComponent("candidate")
+        case .updateCandidate(let candidate):
+            if let id = candidate.id {
+                return baseURL.appendingPathComponent("candidate/\(id)")
+            } else {
+                return baseURL.appendingPathComponent("candidate/")
+            }
+        case .deleteCandidate(let id): return baseURL.appendingPathComponent("candidate/\(id)")
             
+        case .updateFavorite(id: let id):
+            return baseURL.appendingPathComponent("candidate/\(id)/favorite")
         }
     }
     
@@ -54,17 +71,17 @@ enum Endpoint  {
             return try? JSONEncoder().encode(login)
         case .user_register(registerUser: let registerUser):
             return try? JSONEncoder().encode(registerUser)
-        case .createCandidate(candidate: let candidate):
+        case .updateCandidate(candidate: let candidate), .createCandidate(candidate: let candidate):
             return try? JSONEncoder().encode(candidate)
-        
+            
         default : return nil
         }
     }
-        
-   
-        
     
-        
-   
+    
+    
+    
+    
+    
     
 }

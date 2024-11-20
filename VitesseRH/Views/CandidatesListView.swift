@@ -18,7 +18,7 @@ struct CandidatesListView: View {
             VStack {
                 HStack {
                     Button {
-                        
+                        viewModel.switchEditOrViewMode()
                     } label: {
                         Text(!viewModel.isEdit  ? "Edit" : "Cancel")
                             .foregroundColor(Color("ButtonColor"))
@@ -29,29 +29,43 @@ struct CandidatesListView: View {
                     Spacer()
                     
                     Button {
-                        
+                        if viewModel.isEdit {
+                            Task {
+                                await viewModel.deleteCandidates()
+                            }
+                            
+                        }
                     } label: {
-                        Image(systemName: isToggled ? "star.fill" : "star")
-                                        .scaledToFit()
-                                        .onTapGesture {
-                                            withAnimation(.easeInOut(duration: 0.3)) {
-                                                isToggled.toggle()
-                                            }
-                                        }
-                                        .foregroundColor(Color("ButtonColor"))
+                        if (viewModel.isEdit) {
+                            Text("Delete")
+                                .foregroundColor(Color("ButtonColor"))
+                        } else {
+                            Image(systemName: viewModel.isFilterFav ? "star.fill" : "star")
+                                .scaledToFit()
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        viewModel.isFilterFav.toggle()
+                                    }
+                                    viewModel.filterAndSortCandidates()
+                                }
+                                .foregroundColor(Color("ButtonColor"))
+                            
+                        }
+                        
                     }
                     
                     
                 }.padding(25)
                 Spacer()
-               
+                
                 HStack {
                     Image(systemName: "magnifyingglass")
                     TextField("Search", text: $viewModel.search)
+                        .autocorrectionDisabled(true)
                         .textFieldStyle(PlainTextFieldStyle())
                         .onChange(of: viewModel.search) {
-                            viewModel.filterCandidates()
-                            }
+                            viewModel.filterAndSortCandidates()
+                        }
                     Button {
                         viewModel.search.removeAll()
                     } label: {
@@ -66,20 +80,30 @@ struct CandidatesListView: View {
                 
                 // Liste des candidats
                 ScrollView {
-                    ForEach(viewModel.candidatesFilter, id: \.id) { candidate in
+                    ForEach($viewModel.candidatesFilter, id: \.id) {  $candidate in
                         Button(action: {
                             viewModel.viewCandidate(navigation: navigation, candidate: candidate)
                         }) {
                             HStack {
+                                
+                                if (viewModel.isEdit) {
+                                    Button(action: {
+                                        candidate.isSelected.toggle()
+                                    }) {
+                                        Image(systemName: candidate.isSelected ? "checkmark.circle.fill" : "circle")
+                                    }.padding(5)
+                                }
+                                
                                 Text(candidate.name)
                                     .font(.headline)
                                     .foregroundColor(.black)
-                                    .padding()
+                                    .padding(.vertical, 15)
+                                    .padding(.horizontal, viewModel.isEdit ? 0 : 5)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                                 Spacer()
-                                Image(systemName: "star.fill")
+                                Image(systemName: candidate.isFavorite ? "star.fill" : "star")
                                     .foregroundColor(.black)
                                     .padding(.trailing)
                             }
@@ -92,16 +116,23 @@ struct CandidatesListView: View {
                     }
                 }.padding(10)
                 
+                HStack {
+                    Text(viewModel.messageAlert)
+                        .transition(.move(edge: .top))
+                        .foregroundColor(.red)
+                    Spacer()
+                    Button(action: {navigation.navigateToAddCandidate()}) {
+                        HStack {
+                            
+                            Image(systemName: "person.badge.plus")
+                                .font(.title)
+                                .foregroundColor(Color("ButtonColor"))
+                        }
+                        
+                        
+                    }.disabled(viewModel.isEdit)
+                }.padding(25)
                 
-                Button(action: {navigation.navigateToAddCandidate()}) {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "person.badge.plus")
-                            .font(.title)
-                            .foregroundColor(Color("ButtonColor"))
-                    }.padding()
-                    
-                }
             }
             .applyBackground([Color("BackgroundColorFrom"), Color("BackgroundColorTo")])
             .navigationDestination(for: Navigation.self) { destination in
@@ -110,8 +141,7 @@ struct CandidatesListView: View {
                 case .addCandidate:
                     CandidateView(viewModel: CandidateViewModel(apiService: APIClient()),navigation: navigation)
                 case .candidate(let id):
-                     CandidateView(viewModel: CandidateViewModel(apiService: APIClient(), mode: .view, id: id),navigation: navigation)
-               
+                    CandidateView(viewModel: CandidateViewModel(apiService: APIClient(), mode: .view, id: id),navigation: navigation)
                 default:    EmptyView()
                 }
             }
@@ -124,7 +154,7 @@ struct CandidatesListView: View {
             }
             .navigationBarBackButtonHidden(true)
             
-               
+            
             
         }
         

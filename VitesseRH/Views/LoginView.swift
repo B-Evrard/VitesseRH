@@ -16,7 +16,7 @@ struct LoginView: View {
     
     var body: some View {
         NavigationStack(path: $navigation.path) {
-
+            
             VStack {
                 
                 LogoView()
@@ -30,6 +30,9 @@ struct LoginView: View {
                     Text("Email/Username")
                         .font(.headline)
                     TextField("", text: $viewModel.email)
+                        .autocorrectionDisabled(true)
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(.bottom, 10)
                     
@@ -100,10 +103,10 @@ struct LoginView: View {
             }
             .navigationDestination(for: Navigation.self) { destination in
                 switch destination {
-                    case .register:
+                case .register:
                     RegisterView(viewModel: RegisterViewModel(apiService: APIClient(), navigation: navigation))
-                   
-                    default:    EmptyView()
+                    
+                default:    EmptyView()
                 }
             }
         }

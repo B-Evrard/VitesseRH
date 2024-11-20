@@ -27,7 +27,7 @@ class LoginViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     
     let onLoginSucceed: ((Token) -> Void)
-   
+    
     private var login: Login?
     private let apiService: APIService
     
@@ -59,11 +59,11 @@ class LoginViewModel: ObservableObject {
         }
         let result = await apiService.authentication(login: login)
         switch result {
-        
+            
         case .success(let token):
             onLoginSucceed(token)
             return
-        
+            
         case .failure(let error):
             messageAlert = error.message
         }

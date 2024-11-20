@@ -8,7 +8,7 @@
 import Foundation
 
 final class APIClient: APIService {
-
+    
     private let session: URLSessionProtocol
     
     init(session: URLSessionProtocol = URLSession.shared) {
@@ -38,6 +38,20 @@ final class APIClient: APIService {
     func createCandidate(candidate: Candidate) async  -> Result<Candidate, APIError> {
         return await apiClientCore.performAPIRequest(endPoint: Endpoint.createCandidate(candidate: candidate))
     }
+    
+    func updateCandidate(candidate: Candidate) async  -> Result<Candidate, APIError> {
+        return await apiClientCore.performAPIRequest(endPoint: Endpoint.updateCandidate(candidate: candidate))
+    }
+    
+    func deleteCandidate(id: String) async -> Result<Bool, APIError> {
+        return await apiClientCore.performAPIRequest(endPoint: Endpoint.deleteCandidate(id: id))
+    }
+    
+    func updateFavorite(id: String) async -> Result<Candidate, APIError> {
+        return await apiClientCore.performAPIRequest(endPoint: Endpoint.updateFavorite(id: id))
+    }
+    
+    
     
     
 }

@@ -10,12 +10,12 @@ import SwiftUI
 class NavigationViewModel: ObservableObject {
     
     @Published var path = NavigationPath()
-
+    
     func navigateTo(dest: Navigation) {
         print("Navigate to \(dest)")
         path.append(dest)
     }
-
+    
     func resetNavigation() {
         path.removeLast(path.count)
     }
@@ -45,10 +45,6 @@ class NavigationViewModel: ObservableObject {
             path.removeLast()
         }
     }
-    
-    
-    
-    
 }
 
 enum Navigation: Hashable {

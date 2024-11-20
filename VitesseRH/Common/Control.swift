@@ -25,7 +25,7 @@ public struct Control  {
         guard registerUser.lastName.isNotEmpty else {
             throw ControlError.lastNameEmpty()
         }
-    
+        
         try validateEmail(registerUser.email)
         
         guard registerUser.password.isNotEmpty else {
@@ -47,7 +47,7 @@ public struct Control  {
         if candidate.email.isNotEmpty {
             try validateEmail(candidate.email)
         }
-
+        
         if let linkedinUrl = candidate.linkedinURL, linkedinUrl.isNotEmpty {
             guard isValidLinkedInURL(linkedinUrl) else {
                 throw ControlError.invalidLinkedinUrl()
@@ -59,7 +59,7 @@ public struct Control  {
         guard email.isNotEmpty else {
             throw ControlError.mailEmpty()
         }
-
+        
         let emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,64}$"
         let emailPredicate = NSPredicate(format: "SELF MATCHES[c] %@", emailRegex)
         
@@ -67,7 +67,7 @@ public struct Control  {
             throw ControlError.invalidFormatMail()
         }
     }
-   
+    
     static func isValidLinkedInURL(_ urlString: String) -> Bool {
         guard let url = URL(string: urlString),
               url.scheme == "http" || url.scheme == "https",
@@ -76,6 +76,6 @@ public struct Control  {
         }
         return true
     }
-        
-   
+    
+    
 }

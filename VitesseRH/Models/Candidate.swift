@@ -19,4 +19,17 @@ struct Candidate: Codable {
     var name: String {
         return "\(firstName) \(lastName)"
     }
+    
+    var isSelected: Bool = false
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case isFavorite
+        case email
+        case note
+        case linkedinURL
+        case firstName
+        case lastName
+        case phone
+    }
 }
