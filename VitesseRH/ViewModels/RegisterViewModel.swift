@@ -13,7 +13,11 @@ class RegisterViewModel: ObservableObject {
     
     @ObservedObject var navigation: NavigationViewModel
     
-    @Published var registerUser = RegisterUser(email: "", password: "", firstName: "", lastName: "" )
+    @Published var email  = ""
+    @Published var password  = ""
+    @Published var firstName  = ""
+    @Published var lastName  = ""
+    
     @Published var confirmedPassword  = ""
     
     @Published var messageAlert: String = ""
@@ -28,6 +32,7 @@ class RegisterViewModel: ObservableObject {
     
     func register() async {
         // Control
+        let registerUser = RegisterUser(email: email, password: password, firstName: firstName, lastName: lastName)
         self.messageAlert = ""
         do {
             try Control.registerUser(registerUser: registerUser, confirmedPassword: confirmedPassword)
@@ -59,7 +64,10 @@ class RegisterViewModel: ObservableObject {
         self.showMessage = false
         self.messageAlert = ""
         self.confirmedPassword = ""
-        registerUser = RegisterUser(email: "", password: "", firstName: "", lastName: "" )
+        self.email = ""
+        self.password = ""
+        self.firstName = ""
+        self.lastName = ""
     }
     
 }

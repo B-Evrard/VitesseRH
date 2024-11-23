@@ -25,21 +25,21 @@ struct RegisterView: View {
             VStack(alignment: .leading) {
                 Text("First Name")
                     .font(.headline)
-                TextField("", text: $viewModel.registerUser.firstName)
+                TextField("", text: $viewModel.firstName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.bottom, 10)
                 Spacer()
                 
                 Text("Last Name")
                     .font(.headline)
-                TextField("", text: $viewModel.registerUser.lastName)
+                TextField("", text: $viewModel.lastName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.bottom, 10)
                 Spacer()
                 
                 Text("Email")
                     .font(.headline)
-                TextField("", text: $viewModel.registerUser.email)
+                TextField("", text: $viewModel.email)
                     .autocorrectionDisabled(true)
                     .keyboardType(.emailAddress)
                     .textInputAutocapitalization(.never)
@@ -49,7 +49,7 @@ struct RegisterView: View {
                 
                 Text("Password")
                     .font(.headline)
-                SecureField("", text: $viewModel.registerUser.password)
+                SecureField("", text: $viewModel.password)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.bottom, 10)
                 Spacer()

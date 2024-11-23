@@ -7,14 +7,7 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
-		FEF935B62CC0F23900573FE9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FEF9359D2CC0F23800573FE9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEF935A42CC0F23800573FE9;
-			remoteInfo = VitesseRH;
-		};
-		FEF935C02CC0F23900573FE9 /* PBXContainerItemProxy */ = {
+		FE65A2012CF21D5B00D19135 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FEF9359D2CC0F23800573FE9 /* Project object */;
 			proxyType = 1;
@@ -24,45 +17,32 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FE65A1FD2CF21D5B00D19135 /* VitesseRHTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseRHTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF935A52CC0F23800573FE9 /* VitesseRH.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VitesseRH.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEF935B52CC0F23900573FE9 /* VitesseRHTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseRHTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEF935BF2CC0F23900573FE9 /* VitesseRHUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseRHUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		FE65A1FE2CF21D5B00D19135 /* VitesseRHTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = VitesseRHTests;
+			sourceTree = "<group>";
+		};
 		FEF935A72CC0F23800573FE9 /* VitesseRH */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = VitesseRH;
 			sourceTree = "<group>";
 		};
-		FEF935B82CC0F23900573FE9 /* VitesseRHTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = VitesseRHTests;
-			sourceTree = "<group>";
-		};
-		FEF935C22CC0F23900573FE9 /* VitesseRHUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = VitesseRHUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		FE65A1FA2CF21D5B00D19135 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FEF935A22CC0F23800573FE9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FEF935B22CC0F23900573FE9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FEF935BC2CC0F23900573FE9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -76,8 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				FEF935A72CC0F23800573FE9 /* VitesseRH */,
-				FEF935B82CC0F23900573FE9 /* VitesseRHTests */,
-				FEF935C22CC0F23900573FE9 /* VitesseRHUITests */,
+				FE65A1FE2CF21D5B00D19135 /* VitesseRHTests */,
 				FEF935A62CC0F23800573FE9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,8 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				FEF935A52CC0F23800573FE9 /* VitesseRH.app */,
-				FEF935B52CC0F23900573FE9 /* VitesseRHTests.xctest */,
-				FEF935BF2CC0F23900573FE9 /* VitesseRHUITests.xctest */,
+				FE65A1FD2CF21D5B00D19135 /* VitesseRHTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +73,30 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		FE65A1FC2CF21D5B00D19135 /* VitesseRHTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE65A2032CF21D5B00D19135 /* Build configuration list for PBXNativeTarget "VitesseRHTests" */;
+			buildPhases = (
+				FE65A1F92CF21D5B00D19135 /* Sources */,
+				FE65A1FA2CF21D5B00D19135 /* Frameworks */,
+				FE65A1FB2CF21D5B00D19135 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FE65A2022CF21D5B00D19135 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FE65A1FE2CF21D5B00D19135 /* VitesseRHTests */,
+				FEF935A72CC0F23800573FE9 /* VitesseRH */,
+			);
+			name = VitesseRHTests;
+			packageProductDependencies = (
+			);
+			productName = VitesseRHTests;
+			productReference = FE65A1FD2CF21D5B00D19135 /* VitesseRHTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		FEF935A42CC0F23800573FE9 /* VitesseRH */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FEF935C92CC0F23900573FE9 /* Build configuration list for PBXNativeTarget "VitesseRH" */;
@@ -117,52 +119,6 @@
 			productReference = FEF935A52CC0F23800573FE9 /* VitesseRH.app */;
 			productType = "com.apple.product-type.application";
 		};
-		FEF935B42CC0F23900573FE9 /* VitesseRHTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FEF935CC2CC0F23900573FE9 /* Build configuration list for PBXNativeTarget "VitesseRHTests" */;
-			buildPhases = (
-				FEF935B12CC0F23900573FE9 /* Sources */,
-				FEF935B22CC0F23900573FE9 /* Frameworks */,
-				FEF935B32CC0F23900573FE9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FEF935B72CC0F23900573FE9 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				FEF935B82CC0F23900573FE9 /* VitesseRHTests */,
-			);
-			name = VitesseRHTests;
-			packageProductDependencies = (
-			);
-			productName = VitesseRHTests;
-			productReference = FEF935B52CC0F23900573FE9 /* VitesseRHTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		FEF935BE2CC0F23900573FE9 /* VitesseRHUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FEF935CF2CC0F23900573FE9 /* Build configuration list for PBXNativeTarget "VitesseRHUITests" */;
-			buildPhases = (
-				FEF935BB2CC0F23900573FE9 /* Sources */,
-				FEF935BC2CC0F23900573FE9 /* Frameworks */,
-				FEF935BD2CC0F23900573FE9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FEF935C12CC0F23900573FE9 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				FEF935C22CC0F23900573FE9 /* VitesseRHUITests */,
-			);
-			name = VitesseRHUITests;
-			packageProductDependencies = (
-			);
-			productName = VitesseRHUITests;
-			productReference = FEF935BF2CC0F23900573FE9 /* VitesseRHUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -170,19 +126,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					FE65A1FC2CF21D5B00D19135 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = FEF935A42CC0F23800573FE9;
+					};
 					FEF935A42CC0F23800573FE9 = {
 						CreatedOnToolsVersion = 16.0;
-					};
-					FEF935B42CC0F23900573FE9 = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = FEF935A42CC0F23800573FE9;
-					};
-					FEF935BE2CC0F23900573FE9 = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = FEF935A42CC0F23800573FE9;
 					};
 				};
 			};
@@ -201,28 +153,20 @@
 			projectRoot = "";
 			targets = (
 				FEF935A42CC0F23800573FE9 /* VitesseRH */,
-				FEF935B42CC0F23900573FE9 /* VitesseRHTests */,
-				FEF935BE2CC0F23900573FE9 /* VitesseRHUITests */,
+				FE65A1FC2CF21D5B00D19135 /* VitesseRHTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		FE65A1FB2CF21D5B00D19135 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FEF935A32CC0F23800573FE9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FEF935B32CC0F23900573FE9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FEF935BD2CC0F23900573FE9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -232,21 +176,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		FE65A1F92CF21D5B00D19135 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FEF935A12CC0F23800573FE9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FEF935B12CC0F23900573FE9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FEF935BB2CC0F23900573FE9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -256,19 +193,50 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FEF935B72CC0F23900573FE9 /* PBXTargetDependency */ = {
+		FE65A2022CF21D5B00D19135 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FEF935A42CC0F23800573FE9 /* VitesseRH */;
-			targetProxy = FEF935B62CC0F23900573FE9 /* PBXContainerItemProxy */;
-		};
-		FEF935C12CC0F23900573FE9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEF935A42CC0F23800573FE9 /* VitesseRH */;
-			targetProxy = FEF935C02CC0F23900573FE9 /* PBXContainerItemProxy */;
+			targetProxy = FE65A2012CF21D5B00D19135 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		FE65A2042CF21D5B00D19135 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = bruno.VitesseRHTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VitesseRH.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VitesseRH";
+			};
+			name = Debug;
+		};
+		FE65A2052CF21D5B00D19135 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = bruno.VitesseRHTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VitesseRH.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VitesseRH";
+			};
+			name = Release;
+		};
 		FEF935C72CC0F23900573FE9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -446,81 +414,18 @@
 			};
 			name = Release;
 		};
-		FEF935CD2CC0F23900573FE9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C3825553HQ;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = bruno.VitesseRHTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VitesseRH.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VitesseRH";
-			};
-			name = Debug;
-		};
-		FEF935CE2CC0F23900573FE9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C3825553HQ;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = bruno.VitesseRHTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VitesseRH.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VitesseRH";
-			};
-			name = Release;
-		};
-		FEF935D02CC0F23900573FE9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C3825553HQ;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = bruno.VitesseRHUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = VitesseRH;
-			};
-			name = Debug;
-		};
-		FEF935D12CC0F23900573FE9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C3825553HQ;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = bruno.VitesseRHUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = VitesseRH;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		FE65A2032CF21D5B00D19135 /* Build configuration list for PBXNativeTarget "VitesseRHTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE65A2042CF21D5B00D19135 /* Debug */,
+				FE65A2052CF21D5B00D19135 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FEF935A02CC0F23800573FE9 /* Build configuration list for PBXProject "VitesseRH" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -535,24 +440,6 @@
 			buildConfigurations = (
 				FEF935CA2CC0F23900573FE9 /* Debug */,
 				FEF935CB2CC0F23900573FE9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FEF935CC2CC0F23900573FE9 /* Build configuration list for PBXNativeTarget "VitesseRHTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FEF935CD2CC0F23900573FE9 /* Debug */,
-				FEF935CE2CC0F23900573FE9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FEF935CF2CC0F23900573FE9 /* Build configuration list for PBXNativeTarget "VitesseRHUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FEF935D02CC0F23900573FE9 /* Debug */,
-				FEF935D12CC0F23900573FE9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
