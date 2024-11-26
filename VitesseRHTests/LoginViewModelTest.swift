@@ -9,7 +9,7 @@ import XCTest
 
 final class LoginViewModelTest: XCTestCase {
     @MainActor
-    func testControl() async {
+    func testAuthenticate() async {
         
         
         let appViewModel = AppViewModel()
@@ -51,13 +51,37 @@ final class LoginViewModelTest: XCTestCase {
         XCTAssertTrue(viewModel.showAlert)
         XCTAssertEqual(viewModel.messageAlert, error.message)
         
-        // Login Ok
+        // Email and password ok login OK
         viewModel.email = "test@test.com"
         viewModel.password = "123456"
         await viewModel.authenticate()
         
-        XCTAssertFalse(viewModel.showAlert)
-        XCTAssertTrue(viewModel.messageAlert.isEmpty)
+        do {
+            let tokenTest =  try JSONDecoder().decode(Token.self, from: token.data(using: .utf8)!)
+            XCTAssertFalse(viewModel.showAlert)
+            XCTAssertTrue(viewModel.messageAlert.isEmpty)
+            XCTAssertEqual(TokenManager.shared.tokenStorage.token?.token , tokenTest.token)
+        } catch {
+            XCTFail("Error decoding token")
+        }
+        
+        // Email and password ok login NOK
+        session.data = error401.data(using: .utf8)
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 401, httpVersion: nil, headerFields: nil)
+        viewModel.email = "test@test.com"
+        viewModel.password = "123456"
+        await viewModel.authenticate()
+        do {
+            let errorTest =  try JSONDecoder().decode(ErrorResponse.self, from: error401.data(using: .utf8)!)
+            XCTAssertTrue(viewModel.showAlert)
+            XCTAssertEqual(viewModel.messageAlert, errorTest.reason)
+       } catch {
+           XCTFail("Error decoding token")
+       }
+        
+        
+       
+        
         
     }
     
@@ -65,6 +89,13 @@ final class LoginViewModelTest: XCTestCase {
     {
     "token": "FfdfsdfdF9fdsf.fdsfdf98FDkzfdA3122.J83TqjxRzmuDuruBChNT8sMg5tfRi5iQ6tUlqJb3M9U",
     "isAdmin": false
+    }
+    """
+    
+    let error401 = """
+    {
+    "reason":"User not found.",
+    "error":true
     }
     """
 
