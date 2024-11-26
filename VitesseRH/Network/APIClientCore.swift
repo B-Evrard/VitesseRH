@@ -47,6 +47,12 @@ final class APIClientCore {
             }
             let (data, response) = try await session.data(for: request)
             
+            if let stringData = String(data: data, encoding: .utf8) {
+                print("Contenu de data : \(stringData)")
+            } else {
+                print("Impossible de convertir data en chaîne UTF-8")
+            }
+            
             guard let httpResponse = response as? HTTPURLResponse else {
                 return .failure(.genericError())
             }
@@ -66,6 +72,7 @@ final class APIClientCore {
         
         switch httpResponse.statusCode {
         case 200...299:
+            
             if data.isEmpty {
                 return .success(true as! T)
             }

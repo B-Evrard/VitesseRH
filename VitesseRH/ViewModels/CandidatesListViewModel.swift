@@ -42,7 +42,7 @@ class CandidatesListViewModel: ObservableObject {
     }
     
     func viewCandidate(navigation: NavigationViewModel, candidate: Candidate) {
-        if !isEdit {
+        if !self.isEdit {
             guard let candidateID = candidate.id else { return }
             navigation.navigateToCandidate(id: candidateID)
         }
