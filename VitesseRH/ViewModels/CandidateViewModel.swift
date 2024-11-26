@@ -36,7 +36,6 @@ class CandidateViewModel: ObservableObject {
     ///   - id: Candidate Id
     init(apiService: APIService, mode: FormMode, id: String ) {
         self.apiService = apiService
-        //self.navigation = navigation
         self.mode = mode
         self.id = id
     }
@@ -46,7 +45,6 @@ class CandidateViewModel: ObservableObject {
     ///   - apiService: apiService
     init(apiService: APIService) {
         self.apiService = apiService
-        //self.navigation = navigation
         self.mode = FormMode.add
         
     }
@@ -54,8 +52,7 @@ class CandidateViewModel: ObservableObject {
     func readCandidate() async {
         
         if (self.mode != .add) {
-            let id = self.id
-            let result = await apiService.candidate(id: id)
+            let result = await apiService.candidate(id: self.id)
             switch result {
                 
             case .success(let candidate):

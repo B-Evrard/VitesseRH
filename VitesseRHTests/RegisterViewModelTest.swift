@@ -13,7 +13,6 @@ final class RegisterViewModelTest: XCTestCase {
     func testRegister() async {
         
         let session = MockUrlSession()
-        //session.data = token.data(using: .utf8)
         
         // To be able to use the Endpoint user_register in the HTTPURLResponse, we instantiate a registerUser
         let registerUserTemp: RegisterUser = .init(email: "", password: "", firstName: "", lastName: "")

@@ -55,7 +55,7 @@ final class CandidatesListViewModelTest: XCTestCase {
         XCTAssertEqual(viewModel.candidatesFilter[2].phone, "0601023456")
         XCTAssertEqual(viewModel.candidatesFilter[2].id, "99093C9F-6417-4D9E-A535-A75EBF6C15C2")
         XCTAssertEqual(viewModel.candidatesFilter[2].linkedinURL, nil)
-        XCTAssertEqual(viewModel.candidatesFilter[2].isFavorite, false)
+        XCTAssertEqual(viewModel.candidatesFilter[2].isFavorite, true)
         XCTAssertEqual(viewModel.candidatesFilter[2].note, nil)
         
     }
@@ -78,6 +78,96 @@ final class CandidatesListViewModelTest: XCTestCase {
         
     }
     
+    @MainActor
+    func testFilterAndSortCandidates() async {
+        
+        session.data = candidatesListJson.data(using: .utf8)
+        let endpoint = Endpoint.candidateList
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockApiClient = MockApiClient(session: session)
+        
+        let viewModel = CandidatesListViewModel(apiService: mockApiClient)
+       
+        
+        await viewModel.getListCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 3)
+        
+        viewModel.isFilterFav = false
+        viewModel.search = ""
+        viewModel.filterAndSortCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 3)
+        
+        viewModel.search = "Bernard"
+        viewModel.filterAndSortCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 1)
+        
+        viewModel.search = "ar"
+        viewModel.filterAndSortCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 3)
+        
+        viewModel.isFilterFav = true
+        viewModel.search = ""
+        viewModel.filterAndSortCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 1)
+        
+        viewModel.search = "Bernard"
+        viewModel.filterAndSortCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 0)
+        
+        viewModel.search = "ar"
+        viewModel.filterAndSortCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 1)
+        
+        viewModel.search = "Marie"
+        viewModel.filterAndSortCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 1)
+        
+    }
+    
+    @MainActor
+    func testDeleteCandidates() async {
+        session.data = candidatesListJson.data(using: .utf8)
+        var endpoint = Endpoint.candidateList
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockApiClient = MockApiClient(session: session)
+        
+        let viewModel = CandidatesListViewModel(apiService: mockApiClient)
+        
+        await viewModel.getListCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 3)
+        
+        session.data = "".data(using: .utf8)
+        endpoint = Endpoint.deleteCandidate(id: "")
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
+        
+        await viewModel.deleteCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 3)
+        
+        viewModel.candidatesFilter[0].isSelected.toggle()
+        await viewModel.deleteCandidates()
+        XCTAssertEqual(viewModel.candidatesFilter.count, 2)
+        
+        XCTAssertEqual(viewModel.candidatesFilter[0].firstName, "Jean")
+        XCTAssertEqual(viewModel.candidatesFilter[0].lastName, "Martin")
+        XCTAssertEqual(viewModel.candidatesFilter[0].email, "jean.martin@myemail.com")
+        XCTAssertEqual(viewModel.candidatesFilter[0].phone, "0611223344")
+        XCTAssertEqual(viewModel.candidatesFilter[0].id,"F44E018F-0D0F-4F4F-AA79-4682FFF3C497")
+        XCTAssertEqual(viewModel.candidatesFilter[0].linkedinURL, nil)
+        XCTAssertEqual(viewModel.candidatesFilter[0].isFavorite, false)
+        XCTAssertEqual(viewModel.candidatesFilter[0].note, nil)
+        
+        XCTAssertEqual(viewModel.candidatesFilter[1].firstName, "Marie")
+        XCTAssertEqual(viewModel.candidatesFilter[1].lastName, "Dupuis")
+        XCTAssertEqual(viewModel.candidatesFilter[1].email, "marie.dupuis@myemail.com")
+        XCTAssertEqual(viewModel.candidatesFilter[1].phone, "0601023456")
+        XCTAssertEqual(viewModel.candidatesFilter[1].id, "99093C9F-6417-4D9E-A535-A75EBF6C15C2")
+        XCTAssertEqual(viewModel.candidatesFilter[1].linkedinURL, nil)
+        XCTAssertEqual(viewModel.candidatesFilter[1].isFavorite, true)
+        XCTAssertEqual(viewModel.candidatesFilter[1].note, nil)
+        
+        
+        
+    }
     let candidatesListJsonHS = """
    xxxxxx
    """
@@ -100,7 +190,7 @@ final class CandidatesListViewModelTest: XCTestCase {
             "id": "99093C9F-6417-4D9E-A535-A75EBF6C15C2",
             "firstName": "Marie",
             "linkedinURL": null,
-            "isFavorite": false,
+            "isFavorite": true,
             "email": "marie.dupuis@myemail.com",
             "lastName": "Dupuis"
         },
