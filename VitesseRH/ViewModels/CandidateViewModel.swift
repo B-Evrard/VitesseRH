@@ -113,6 +113,7 @@ class CandidateViewModel: ObservableObject {
             return
             
         case .failure(let error):
+            self.favorite.toggle()
             messageAlert = error.message
             return
             
