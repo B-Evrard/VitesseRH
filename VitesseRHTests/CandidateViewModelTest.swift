@@ -27,6 +27,21 @@ final class CandidateViewModelTest: XCTestCase {
         XCTAssertEqual(viewModel.id, "20AB56FD-1694-4AB4-BFE9-E55B1E027F8A")
         XCTAssertFalse(viewModel.favorite)
         
+        // Candidate not exist
+        session.data = error404.data(using: .utf8)
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 404, httpVersion: nil, headerFields: nil)
+        await viewModel.readCandidate()
+        XCTAssertEqual(viewModel.messageAlert, "Not found.")
+    }
+    
+    func testAddCandidate() async {
+        let endpoint = Endpoint.createCandidate(candidate: <#T##Candidate#>)
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockApiClient = MockApiClient(session: session)
+        
+        let viewModel = await CandidateViewModel(apiService: mockApiClient)
+        
+        
         
     }
     
@@ -41,6 +56,13 @@ final class CandidateViewModelTest: XCTestCase {
             "email": "be@myemail.com",
             "lastName": "Dupond"
         }
+    """
+    
+    let error404 = """
+    {
+    "reason":"Not found.",
+    "error":true
+    }
     """
 
 }
