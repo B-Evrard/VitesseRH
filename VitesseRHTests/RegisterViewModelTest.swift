@@ -8,9 +8,9 @@
 import XCTest
 
 final class RegisterViewModelTest: XCTestCase {
-
+    
     @MainActor
-    func testRegister() async {
+    func testControlRegister() async {
         
         let session = MockUrlSession()
         
@@ -53,28 +53,55 @@ final class RegisterViewModelTest: XCTestCase {
         viewModel.password = "123"
         await viewModel.register()
         XCTAssertEqual(viewModel.messageAlert, ControlError.passwordNotMatch().message)
+    }
+    
+    @MainActor
+    func testRegisterSuccess() async {
+        let session = MockUrlSession()
         
-        // User exist
+        // To be able to use the Endpoint user_register in the HTTPURLResponse, we instantiate a registerUser
+        let registerUserTemp: RegisterUser = .init(email: "", password: "", firstName: "", lastName: "")
+        let endpoint = Endpoint.user_register(registerUser: registerUserTemp)
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockApiClient = MockApiClient(session: session)
+        
+        let viewModel = RegisterViewModel(apiService: mockApiClient, navigation: NavigationViewModel())
+        
+        viewModel.firstName = "Bruno"
+        viewModel.lastName = "Evrard"
+        viewModel.email = "test@test.fr"
+        viewModel.password = "123"
         viewModel.confirmedPassword = "123"
-        session.data = error500.data(using: .utf8)
-        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 500, httpVersion: nil, headerFields: nil)
-        await viewModel.register()
-        XCTAssertEqual(viewModel.messageAlert, APIError.userExists().message)
         
-        
-        // User OK
-        viewModel.email = "test2@test.fr"
         session.data = "".data(using: .utf8)
         session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
         await viewModel.register()
         XCTAssertTrue(viewModel.showMessage)
-        
-        
-        
-        
-        
     }
     
+    @MainActor
+    func testRegisterFailure() async {
+        let session = MockUrlSession()
+        
+        // To be able to use the Endpoint user_register in the HTTPURLResponse, we instantiate a registerUser
+        let registerUserTemp: RegisterUser = .init(email: "", password: "", firstName: "", lastName: "")
+        let endpoint = Endpoint.user_register(registerUser: registerUserTemp)
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockApiClient = MockApiClient(session: session)
+        
+        let viewModel = RegisterViewModel(apiService: mockApiClient, navigation: NavigationViewModel())
+        
+        viewModel.firstName = "Bruno"
+        viewModel.lastName = "Evrard"
+        viewModel.email = "test@test.fr"
+        viewModel.password = "123"
+        viewModel.confirmedPassword = "123"
+        
+        session.data = error500.data(using: .utf8)
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 500, httpVersion: nil, headerFields: nil)
+        await viewModel.register()
+        XCTAssertEqual(viewModel.messageAlert, APIError.userExists().message)
+    }
     
     let error500 = """
     {
@@ -83,5 +110,5 @@ final class RegisterViewModelTest: XCTestCase {
     }
     """
     
-
+    
 }

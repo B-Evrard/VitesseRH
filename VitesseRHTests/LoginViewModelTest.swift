@@ -8,9 +8,9 @@
 import XCTest
 
 final class LoginViewModelTest: XCTestCase {
+    
     @MainActor
-    func testAuthenticate() async {
-        
+    func testControlAuthenticate() async {
         
         let appViewModel = AppViewModel()
         let session = MockUrlSession()
@@ -51,6 +51,24 @@ final class LoginViewModelTest: XCTestCase {
         XCTAssertTrue(viewModel.showAlert)
         XCTAssertEqual(viewModel.messageAlert, error.message)
         
+    }
+    
+    @MainActor
+    func testAuthenticate() async {
+        
+        let appViewModel = AppViewModel()
+        let session = MockUrlSession()
+        session.data = token.data(using: .utf8)
+        let login = Login(email: "test", password: "1234")
+        let endpoint = Endpoint.user_auth(login: login)
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockApiClient = MockApiClient(session: session)
+        
+        let viewModel = LoginViewModel (apiService: mockApiClient) { token in
+            appViewModel.isLogged  = true
+            appViewModel.tokenManager.tokenStorage.token = token
+        }
+        
         // Email and password ok login OK
         viewModel.email = "test@test.com"
         viewModel.password = "123456"
@@ -75,15 +93,15 @@ final class LoginViewModelTest: XCTestCase {
             let errorTest =  try JSONDecoder().decode(ErrorResponse.self, from: error401.data(using: .utf8)!)
             XCTAssertTrue(viewModel.showAlert)
             XCTAssertEqual(viewModel.messageAlert, errorTest.reason)
-       } catch {
-           XCTFail("Error decoding token")
-       }
-        
-        
-       
-        
+        } catch {
+            XCTFail("Error decoding token")
+        }
         
     }
+    
+    
+    
+    
     
     let token = """
     {
@@ -98,5 +116,5 @@ final class LoginViewModelTest: XCTestCase {
     "error":true
     }
     """
-
+    
 }

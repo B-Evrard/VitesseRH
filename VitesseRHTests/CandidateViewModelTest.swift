@@ -8,7 +8,7 @@
 import XCTest
 
 final class CandidateViewModelTest: XCTestCase {
-
+    
     let session = MockUrlSession()
     
     @MainActor
@@ -35,7 +35,7 @@ final class CandidateViewModelTest: XCTestCase {
     }
     
     @MainActor
-    func testAddCandidate() async {
+    func testControlAddCandidate() async {
         
         // To be able to use the Endpoint createCandidate in the HTTPURLResponse, we instantiate a candidate
         let candidateTemp = Candidate(id: "", isFavorite: false, email: "", note: "", linkedinURL: nil,  firstName: "", lastName: "", phone: "")
@@ -68,17 +68,38 @@ final class CandidateViewModelTest: XCTestCase {
         await viewModel.validate()
         XCTAssertEqual(viewModel.messageAlert, ControlError.invalidFormatMail().message)
         
-        // Add Ok
-        session.data = addCandidateTest.data(using: .utf8)
+        // invalid linkedin url
         viewModel.email = "lhevia@test.fr"
+        viewModel.linkedIn = "www.linkedn.com/in/bevrard"
         await viewModel.validate()
-        XCTAssertTrue(viewModel.showMessage)
-        
-        
+        XCTAssertEqual(viewModel.messageAlert, ControlError.invalidLinkedinUrl().message)
     }
     
     @MainActor
-    func testUpdate() async {
+    func testAddCandidate() async {
+        // To be able to use the Endpoint createCandidate in the HTTPURLResponse, we instantiate a candidate
+        let candidateTemp = Candidate(id: "", isFavorite: false, email: "", note: "", linkedinURL: nil,  firstName: "", lastName: "", phone: "")
+        let endpoint = Endpoint.createCandidate(candidate: candidateTemp)
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockApiClient = MockApiClient(session: session)
+        
+        let viewModel = CandidateViewModel(apiService: mockApiClient)
+        
+        viewModel.firstName = "Bruno"
+        viewModel.lastName = "Evrard"
+        viewModel.email = "be@be.fr"
+        viewModel.phone = "01 02 03 04 05"
+        viewModel.linkedIn = "http://www.linkedin.com/in/bevrard"
+        viewModel.note = ""
+        viewModel.favorite = false
+        
+        session.data = addCandidateTest.data(using: .utf8)
+        await viewModel.validate()
+        XCTAssertTrue(viewModel.showMessage)
+    }
+    
+    @MainActor
+    func testUpdateSuccess() async {
         
         // Read candidate
         session.data = candidateTest.data(using: .utf8)
@@ -98,13 +119,25 @@ final class CandidateViewModelTest: XCTestCase {
         viewModel.email = "newbe@myemail.com"
         await viewModel.validate()
         XCTAssertTrue(viewModel.showMessage)
+    }
+    
+    @MainActor
+    func testUpdateFail() async {
+        // Read candidate
+        session.data = candidateTest.data(using: .utf8)
+        var endpoint = Endpoint.candidate(id: "20AB56FD-1694-4AB4-BFE9-E55B1E027F8A")
+        session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockApiClient = MockApiClient(session: session)
+        
+        let viewModel = CandidateViewModel(apiService: mockApiClient, mode: FormMode.edit, id: "20AB56FD-1694-4AB4-BFE9-E55B1E027F8A")
+        await viewModel.readCandidate()
         
         // update NOK
+        endpoint = Endpoint.updateCandidate(candidate: viewModel.viewToCandidate())
         session.data = error404.data(using: .utf8)
         session.urlResponse = HTTPURLResponse(url: endpoint.api , statusCode: 404, httpVersion: nil, headerFields: nil)
         await viewModel.validate()
         XCTAssertEqual(viewModel.messageAlert, "Not found.")
-        
     }
     
     @MainActor
@@ -152,8 +185,8 @@ final class CandidateViewModelTest: XCTestCase {
         
     }
     
-  
-        
+    
+    
     let candidateTest = """
         {
             "phone": "0604012136",
@@ -199,7 +232,7 @@ final class CandidateViewModelTest: XCTestCase {
     "error":true
     }
     """
-
+    
     let token = Token(token: "FfdfsdfdF9fdsf.fdsfdf98FDkzfdA3122.J83TqjxRzmuDuruBChNT8sMg5tfRi5iQ6tUlqJb3M9U", isAdmin: false)
     let tokenAdmin = Token(token: "FfdfsdfdF9fdsf.fdsfdf98FDkzfdA3122.J83TqjxRzmuDuruBChNT8sMg5tfRi5iQ6tUlqJb3M9U", isAdmin: true)
 }

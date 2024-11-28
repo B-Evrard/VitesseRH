@@ -12,7 +12,7 @@ final class CandidatesListViewModelTest: XCTestCase {
     
     let session = MockUrlSession()
     
-
+    
     @MainActor
     func testGetListCandidates() async {
         session.data = candidatesListJsonHS.data(using: .utf8)
@@ -21,7 +21,7 @@ final class CandidatesListViewModelTest: XCTestCase {
         let mockApiClient = MockApiClient(session: session)
         
         let viewModel = CandidatesListViewModel(apiService: mockApiClient)
-       
+        
         // Invalid Json
         await viewModel.getListCandidates()
         XCTAssertEqual(viewModel.messageAlert,APIError.invalidData().message)
@@ -66,7 +66,7 @@ final class CandidatesListViewModelTest: XCTestCase {
         
         let mockApiClient = MockApiClient(session: session)
         let viewModel = CandidatesListViewModel(apiService: mockApiClient)
-       
+        
         viewModel.viewCandidate(navigation: mockNavigation, candidate: testCandidate)
         XCTAssertTrue(mockNavigation.navigateToCandidateCalled)
         XCTAssertEqual(mockNavigation.passedCandidateID,"20AB56FD-1694-4AB4-BFE9-E55B1E027F8A")
@@ -87,7 +87,7 @@ final class CandidatesListViewModelTest: XCTestCase {
         let mockApiClient = MockApiClient(session: session)
         
         let viewModel = CandidatesListViewModel(apiService: mockApiClient)
-       
+        
         
         await viewModel.getListCandidates()
         XCTAssertEqual(viewModel.candidatesFilter.count, 3)
@@ -172,7 +172,7 @@ final class CandidatesListViewModelTest: XCTestCase {
    xxxxxx
    """
     
-   let candidatesListJson = """
+    let candidatesListJson = """
     [
         {
             "phone": "0604012136",
