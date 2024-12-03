@@ -28,7 +28,6 @@ final class APIClientCore {
             request?.httpBody = data
         }
         
-        // TODO: Supprimer le test preview
         if let token = TokenManager.shared.tokenStorage.token {
             let authorizationHeader = "Bearer \(token.token ?? "")"
             request?.addValue(authorizationHeader, forHTTPHeaderField: "Authorization")
