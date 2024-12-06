@@ -85,9 +85,9 @@ struct RegisterView: View {
             Spacer()
             
             Text(viewModel.messageAlert)
-                //.transition(.move(edge: .top))
+                .transition(.move(edge: .top))
                 .foregroundColor(.red)
-            //Spacer()
+            Spacer()
         }
         .alert("", isPresented: $viewModel.showMessage) {
             Button("OK", role: .cancel) {
