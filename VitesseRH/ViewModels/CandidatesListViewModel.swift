@@ -82,6 +82,9 @@ class CandidatesListViewModel: ObservableObject {
             candidatesFilter.removeAll { candidate in
                 candidatesDelete.contains { $0.id == candidate.id }
             }
+            candidates.removeAll { candidate in
+                candidatesDelete.contains { $0.id == candidate.id }
+            }
         }
     }
     
